@@ -58,7 +58,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
         message_pointer.hopCount = hopCount;
         message_pointer.sequenceNumber = sequenceNumber;
 
-        printf("Sequence Number: %d", message_pointer->sequenceNumber);
+        printf("Sequence Number: %d", message_pointer.sequenceNumber);
 
         sequenceNumber = sequenceNumber + 1;
 

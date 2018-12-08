@@ -24,7 +24,7 @@ PROCESS(broadcast_process, "Node process");
 AUTOSTART_PROCESSES(&broadcast_process);
 
 static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
-    struct message *message_pointer;
+    struct message message_pointer;
 
     message_pointer = packetbuf_dataptr();
 

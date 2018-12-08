@@ -11,7 +11,9 @@ Date        : 6/12/2018
 #include <stdio.h>
 
 /* These hold the broadcast and unicast structures, respectively. */
-static struct broadcast_conn broadcast;
+ struct broadcast_conn broadcast;
+
+
 
 static int sequenceNumber = -1;
 static int hopFromSink = -1;
@@ -24,6 +26,8 @@ struct message{
 
 };
 
+struct message status;
+
 PROCESS(broadcast_process, "Node process");
 
 AUTOSTART_PROCESSES(&broadcast_process);
@@ -32,21 +36,26 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
     struct message *message_pointer;
 
     message_pointer = packetbuf_dataptr();
-
-    if(message_pointer->sequenceNumber > sequenceNumber || message_pointer -> hopCount ==0){
-        printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
-
-        sequenceNumber  = message_pointer->sequenceNumber;
+    if(message_pointer -> hopCount == 0){
+        status.sequenceNumber  = message_pointer->sequenceNumber;
         parent.u8[0] = from->u8[0];
         parent.u8[1] = from->u8[1];
+        status.hopCount = message_pointer->hopCount + 1;
+    }
+
+    else if(message_pointer->sequenceNumber >= status.sequenceNumber || (parent.u8[0] == from->u8[0] &&  parent.u8[1] == from->u8[1])){
+        printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
+
+        status.sequenceNumber  = message_pointer->sequenceNumber;
+        parent.u8[0] = from->u8[0];
+        parent.u8[1] = from->u8[1];
+        status.hopCount = message_pointer->hopCount + 1;
 
      }
     else{
 
     }
-    hopFromSink = message_pointer->hopCount + 1;
-    message_pointer->hopCount = hopFromSink;
-    packetbuf_copyfrom(&message_pointer, sizeof(struct message));
+    packetbuf_copyfrom(&status, sizeof(struct message));
     broadcast_send(&broadcast);
     printf("Broadcast message sent from Node\n");
 }

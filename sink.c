@@ -51,12 +51,14 @@ PROCESS_THREAD(broadcast_process, ev, data){
     while(1) {
 
         /* Delay 4 seconds */
-        etimer_set(&et, CLOCK_SECOND * 4 + random_rand() % (CLOCK_SECOND * 4));
+        etimer_set(&et, CLOCK_SECOND * 12 + random_rand() % (CLOCK_SECOND * 12));
 
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
         message_pointer.hopCount = hopCount;
         message_pointer.sequenceNumber = sequenceNumber;
+
+        printf("Sequence Number: %d", message_pointer->sequenceNumber);
 
         sequenceNumber = sequenceNumber + 1;
 

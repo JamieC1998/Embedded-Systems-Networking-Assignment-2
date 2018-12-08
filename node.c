@@ -34,7 +34,7 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
     message_pointer = packetbuf_dataptr();
 
     if(message_pointer->sequenceNumber > sequenceNumber){
-        printf("Hop Count: %d\nSequence Number: %d", message_pointer->hopCount, message_pointer->sequenceNumber);
+        printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
 
         sequenceNumber  = message_pointer->sequenceNumber;
         hopFromSink     = message_pointer->hopCount;

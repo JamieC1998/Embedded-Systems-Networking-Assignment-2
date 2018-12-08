@@ -13,6 +13,11 @@ Date        : 6/12/2018
 /* These hold the broadcast and unicast structures, respectively. */
 static struct broadcast_conn broadcast;
 
+static int sequenceNumber = -1;
+static int hopFromSink = -1;
+
+static linkaddr_t parent;
+
 struct message{
     int sequenceNumber;
     int hopCount;
@@ -28,7 +33,23 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
 
     message_pointer = packetbuf_dataptr();
 
-    printf("Hop Count: %d\n", message_pointer->hopCount);
+    if(message_pointer->sequenceNumber > sequenceNumber){
+        printf("Hop Count: %d\n", message_pointer->hopCount);
+
+        sequenceNumber  = message_pointer->sequenceNumber;
+        hopFromSink     = message_pointer->hopCount;
+
+        parent.u8[0] = from->u8[0];
+        parent.u8[1] = from->u8[1];
+
+        message_pointer->hopCount++;
+
+        packetbuf_copyfrom(&message_pointer, sizeof(struct message));
+        broadcast_send(&broadcast);
+    }
+    
+
+    
     
 }
 

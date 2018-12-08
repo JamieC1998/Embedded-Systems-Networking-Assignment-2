@@ -51,7 +51,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
     while(1) {
 
         /* Delay 4 seconds */
-        //etimer_set(&et, CLOCK_SECOND * 12 + random_rand() % (CLOCK_SECOND * 12));
+        etimer_set(&et, CLOCK_SECOND * 12 + random_rand() % (CLOCK_SECOND * 12));
 
         //PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 

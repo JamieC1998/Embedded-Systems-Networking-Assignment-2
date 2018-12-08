@@ -48,12 +48,10 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
     //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
-    
-
     while(1) {
 
         /* Delay 4 seconds */
-        etimer_set(&et, CLOCK_SECOND * 4);
+        etimer_set(&et, CLOCK_SECOND * 4 + random_rand() % (CLOCK_SECOND * 4));
 
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 

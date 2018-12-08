@@ -5,7 +5,7 @@ Date        : 6/12/2018
 */
 
 #include "contiki.h"
-#include "net/rime.h"
+#include "net/rime/rime.h"
 #include "random.h"
 #include <stdio.h>
 

@@ -26,7 +26,9 @@ AUTOSTART_PROCESSES(&broadcast_process);
 static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
     struct message message_pointer;
 
-    message_pointer = packetbuf_dataptr();
+    struct message *contents = packetbuf_dataptr();
+
+    message_pointer = &contents;
 
     printf("Hop Count: %d\n", message_pointer->hopCount);
     

@@ -10,17 +10,13 @@ Date        : 6/12/2018
 #include "random.h"
 #include <stdio.h>
 
-/* These hold the broadcast and unicast structures, respectively. */
-static struct broadcast_conn broadcast;
-
-struct message{
+struct message {
     int sequenceNumber;
     int hopCount;
 
 };
 
 PROCESS(broadcast_process, "Broadcast process");
-
 AUTOSTART_PROCESSES(&broadcast_process);
 
 static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
@@ -28,11 +24,14 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
 }
 
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
+/* These hold the broadcast and unicast structures, respectively. */
+static struct broadcast_conn broadcast;
 
 PROCESS_THREAD(broadcast_process, ev, data){
 
     //Creating our ETimer
     static struct etimer et;
+    struct message message_pointer;
 
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
 
@@ -46,21 +45,23 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
     //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
-    struct message message_pointer;
-
-    message_pointer.hopCount = 0;
+    int sequenceNumber = 0;
+    int hopCount = 0;
 
     while(1) {
 
-        message_pointer.sequenceNumber += 1;
-
         /* Delay 4 seconds */
         etimer_set(&et, CLOCK_SECOND * 4);
-
+        
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
+        message_pointer.hopCount = hopCount;
+        message_pointer.sequenceNumber = sequenceNumber;
+
+        sequenceNumber++;
+
         /*
-        Every 2 - 4 seconds we copy a string into the packetbuffer
+        Every 4 seconds we copy a struct into the packetbuffer
         and then send out the packet in a broadcast
         */
         packetbuf_copyfrom(&message_pointer, sizeof(struct message));

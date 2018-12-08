@@ -46,7 +46,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
     //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
-    struct message *message_pointer;
+    struct message message_pointer;
 
     message_pointer->hopCount = 0;
 

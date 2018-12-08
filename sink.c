@@ -47,12 +47,12 @@ PROCESS_THREAD(broadcast_process, ev, data){
     //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
     struct message *message_pointer;
-    
-    message_pointer->hopCount = 0;
+
+    message_pointer.hopCount = 0;
 
     while(1) {
 
-        message_pointer->sequenceNumber += 1;
+        message_pointer.sequenceNumber += 1;
 
         /* Delay 4 seconds */
         etimer_set(&et, CLOCK_SECOND * 4);

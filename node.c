@@ -28,7 +28,7 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
 
     message_pointer = packetbuf_dataptr();
 
-    printf("Hop Count: %d", message_pointer->hopCount);
+    printf("Hop Count: %d\n", message_pointer->hopCount);
     
 }
 

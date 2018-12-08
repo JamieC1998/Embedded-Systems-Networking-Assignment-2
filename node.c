@@ -70,5 +70,9 @@ PROCESS_THREAD(broadcast_process, ev, data){
     */
     broadcast_open(&broadcast, 146, &broadcast_call);
 
+    while(1){
+        
+    }
+
     PROCESS_END();
 }

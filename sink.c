@@ -33,6 +33,9 @@ PROCESS_THREAD(broadcast_process, ev, data){
     static struct etimer et;
     struct message message_pointer;
 
+    static int sequenceNumber = 0;
+    static int hopCount = 0;
+
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
 
     PROCESS_BEGIN();
@@ -45,20 +48,19 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
     //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
-    int sequenceNumber = 0;
-    int hopCount = 0;
+    
 
     while(1) {
 
         /* Delay 4 seconds */
         etimer_set(&et, CLOCK_SECOND * 4);
-        
+
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
         message_pointer.hopCount = hopCount;
         message_pointer.sequenceNumber = sequenceNumber;
 
-        sequenceNumber++;
+        sequenceNumber = sequenceNumber + 1;
 
         /*
         Every 4 seconds we copy a struct into the packetbuffer

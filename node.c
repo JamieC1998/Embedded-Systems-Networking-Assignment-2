@@ -49,7 +49,5 @@ PROCESS_THREAD(broadcast_process, ev, data){
     */
     broadcast_open(&broadcast, 146, &broadcast_call);
 
-    struct message *message_pointer = calloc(sizeof (struct message), 1);
-
     PROCESS_END();
 }

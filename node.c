@@ -57,7 +57,7 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
     }
     packetbuf_copyfrom(&status, sizeof(struct message));
     broadcast_send(&broadcast);
-    printf("Broadcast message sent from Node\n");
+    //printf("Broadcast message sent from Node\n");
 }
 
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};

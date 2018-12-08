@@ -33,7 +33,7 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
 
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
 
-PROCESS_THREAD(example_broadcast_process, ev, data){
+PROCESS_THREAD(broadcast_process, ev, data){
 
     //Creating our ETimer
     static struct etimer et;

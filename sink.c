@@ -13,8 +13,8 @@ Date        : 6/12/2018
 static struct broadcast_conn broadcast;
 
 struct message{
-    int sequenceNumber = 0;
-    int hopCount = 0;
+    int sequenceNumber;
+    int hopCount;
 
 };
 
@@ -45,6 +45,8 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
     struct message *message_pointer = calloc(sizeof (struct message), 1);
 
+    message_pointer->hopCount = 0;
+    
     while(1) {
 
         message_pointer->sequenceNumber += 1;

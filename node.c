@@ -1,4 +1,5 @@
 /*
+Node
 Author      : Jamie Cotter
 Student ID  : R00154256
 Date        : 6/12/2018
@@ -13,8 +14,8 @@ Date        : 6/12/2018
 static struct broadcast_conn broadcast;
 
 struct message{
-    int sequenceNumber = 0;
-    int hopCount = 0;
+    int sequenceNumber;
+    int hopCount;
 
 };
 

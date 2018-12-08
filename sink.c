@@ -1,4 +1,5 @@
 /*
+Sink
 Author      : Jamie Cotter
 Student ID  : R00154256
 Date        : 6/12/2018
@@ -46,7 +47,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
     struct message *message_pointer = calloc(sizeof (struct message), 1);
 
     message_pointer->hopCount = 0;
-    
+
     while(1) {
 
         message_pointer->sequenceNumber += 1;

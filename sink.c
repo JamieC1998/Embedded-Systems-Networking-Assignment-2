@@ -44,7 +44,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
     */
     broadcast_open(&broadcast, 146, &broadcast_call);
 
-    struct message *message_pointer = malloc(sizeof(struct message) * 1);
+    //struct message *message_pointer = malloc(sizeof(struct message) * 1);
 
     message_pointer->hopCount = 0;
 
@@ -61,7 +61,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
         Every 2 - 4 seconds we copy a string into the packetbuffer
         and then send out the packet in a broadcast
         */
-        packetbuf_copyfrom(message_pointer, sizeof(struct message));
+        packetbuf_copyfrom(&message_pointer, sizeof(struct message));
         broadcast_send(&broadcast);
 
     }

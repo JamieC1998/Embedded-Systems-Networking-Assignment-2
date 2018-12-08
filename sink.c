@@ -34,7 +34,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
     struct message message_pointer;
 
     static int sequenceNumber = 0;
-    static int hopCount = 0;
+
 
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
 
@@ -54,11 +54,8 @@ PROCESS_THREAD(broadcast_process, ev, data){
         etimer_set(&et, CLOCK_SECOND * 4 + random_rand() % (CLOCK_SECOND * 4));
         PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
-        message_pointer.hopCount = hopCount;
+        message_pointer.hopCount = 0;
         message_pointer.sequenceNumber = sequenceNumber;
-
-        sequenceNumber = sequenceNumber + 1;
-
         /*
         Every 4 seconds we copy a struct into the packetbuffer
         and then send out the packet in a broadcast
@@ -66,6 +63,7 @@ PROCESS_THREAD(broadcast_process, ev, data){
         packetbuf_copyfrom(&message_pointer, sizeof(struct message));
         broadcast_send(&broadcast);
 
+        sequenceNumber += 1;
     }
 
     PROCESS_END();

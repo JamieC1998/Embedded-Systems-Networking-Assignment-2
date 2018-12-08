@@ -33,32 +33,27 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
 
     message_pointer = packetbuf_dataptr();
 
-    if(message_pointer->sequenceNumber > sequenceNumber){
+    if(message_pointer->sequenceNumber > sequenceNumber || message_pointer -> hopCount ==0){
         printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
 
         sequenceNumber  = message_pointer->sequenceNumber;
-        hopFromSink     = message_pointer->hopCount;
-
         parent.u8[0] = from->u8[0];
         parent.u8[1] = from->u8[1];
 
-        message_pointer->hopCount++;
-
-        packetbuf_copyfrom(&message_pointer, sizeof(struct message));
-        broadcast_send(&broadcast);
-    }
+     }
     else{
 
     }
-
+    hopFromSink = message_pointer->hopCount + 1;
+    message_pointer->hopCount = hopFromSink;
+    packetbuf_copyfrom(&message_pointer, sizeof(struct message));
+    broadcast_send(&broadcast);
+    printf("Broadcast message sent from Node\n");
 }
 
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
 
 PROCESS_THREAD(broadcast_process, ev, data){
-
-    //Creating our ETimer
-    static struct etimer et;
 
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
 
@@ -70,9 +65,6 @@ PROCESS_THREAD(broadcast_process, ev, data){
     */
     broadcast_open(&broadcast, 146, &broadcast_call);
 
-    while(1){
-        
-    }
 
     PROCESS_END();
 }

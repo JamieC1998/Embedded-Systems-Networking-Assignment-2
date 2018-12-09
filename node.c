@@ -42,6 +42,9 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
         parent.u8[0] = from->u8[0];
         parent.u8[1] = from->u8[1];
         status.hopCount = message_pointer->hopCount + 1;
+
+        packetbuf_copyfrom(&status, sizeof(struct message));
+        broadcast_send(&broadcast);
         
     }
 
@@ -53,12 +56,15 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
         parent.u8[1] = from->u8[1];
         status.hopCount = message_pointer->hopCount + 1;
 
+        packetbuf_copyfrom(&status, sizeof(struct message));
+        broadcast_send(&broadcast);
+
      }
     else{
 
     }
-    packetbuf_copyfrom(&status, sizeof(struct message));
-    broadcast_send(&broadcast);
+    //packetbuf_copyfrom(&status, sizeof(struct message));
+    //broadcast_send(&broadcast);
     //printf("Broadcast message sent from Node\n");
 }
 

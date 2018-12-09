@@ -23,6 +23,7 @@ static linkaddr_t parent;
 struct message{
     int sequenceNumber;
     int hopCount;
+    int wipe_value;
 
 };
 
@@ -36,32 +37,43 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from){
     struct message *message_pointer;
 
     message_pointer = packetbuf_dataptr();
-    if(message_pointer -> hopCount == 0){
-        printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
-        status.sequenceNumber  = message_pointer->sequenceNumber;
-        parent.u8[0] = from->u8[0];
-        parent.u8[1] = from->u8[1];
-        status.hopCount = message_pointer->hopCount + 1;
+    if(message_pointer -> wipe_value == 1){
+        parent.u8[0] = NULL;
+        parent.u8[1] = NULL;
+
+        status.hopCount = 0;
+        status.sequenceNumber = 0;
 
         packetbuf_copyfrom(&status, sizeof(struct message));
         broadcast_send(&broadcast);
-        
+
+
     }
-
-    else if(message_pointer->sequenceNumber > status.sequenceNumber || (parent.u8[0] == from->u8[0] &&  parent.u8[1] == from->u8[1])){
-        printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
-
-        status.sequenceNumber  = message_pointer->sequenceNumber;
-        parent.u8[0] = from->u8[0];
-        parent.u8[1] = from->u8[1];
-        status.hopCount = message_pointer->hopCount + 1;
-
-        packetbuf_copyfrom(&status, sizeof(struct message));
-        broadcast_send(&broadcast);
-
-     }
     else{
+        if(message_pointer -> hopCount == 0){
+            printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
+            status.sequenceNumber  = message_pointer->sequenceNumber;
+            parent.u8[0] = from->u8[0];
+            parent.u8[1] = from->u8[1];
+            status.hopCount = message_pointer->hopCount + 1;
 
+            packetbuf_copyfrom(&status, sizeof(struct message));
+            broadcast_send(&broadcast);
+        
+        }
+
+        else if(message_pointer->sequenceNumber > status.sequenceNumber || (parent.u8[0] == from->u8[0] &&  parent.u8[1] == from->u8[1])){
+            printf("Hop Count: %d\nSequence Number: %d\n", message_pointer->hopCount, message_pointer->sequenceNumber);
+
+            status.sequenceNumber  = message_pointer->sequenceNumber;
+            parent.u8[0] = from->u8[0];
+            parent.u8[1] = from->u8[1];
+            status.hopCount = message_pointer->hopCount + 1;
+
+            packetbuf_copyfrom(&status, sizeof(struct message));
+            broadcast_send(&broadcast);
+
+        }
     }
     //packetbuf_copyfrom(&status, sizeof(struct message));
     //broadcast_send(&broadcast);

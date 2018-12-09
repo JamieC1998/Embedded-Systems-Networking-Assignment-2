@@ -13,6 +13,7 @@ Date        : 6/12/2018
 struct message {
     int sequenceNumber;
     int hopCount;
+    int wipe_value;
 
 };
 
@@ -56,6 +57,11 @@ PROCESS_THREAD(broadcast_process, ev, data){
 
         message_pointer.hopCount = 0;
         message_pointer.sequenceNumber = sequenceNumber;
+        message_pointer.wipe_value = 0;
+
+        if(sequenceNumber > 20){
+            message_pointer.wipe_value = 1;
+        }
         /*
         Every 4 seconds we copy a struct into the packetbuffer
         and then send out the packet in a broadcast
@@ -64,6 +70,10 @@ PROCESS_THREAD(broadcast_process, ev, data){
         broadcast_send(&broadcast);
 
         sequenceNumber += 1;
+
+        if(message_pointer.wipe_value == 1){
+            sequenceNumber = 0;
+        }
     }
 
     PROCESS_END();
